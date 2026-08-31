@@ -6,8 +6,9 @@
   --color-fg: #171714;
   --color-muted: #6b6960;
   --color-subtle: #8f8c82;
-  --color-primary: #16332c;
+  --color-primary: #172d45;
   --color-primary-fg: #f3f1eb;
+  --color-accent: #b94f25;
   --color-border: #e4e0d6;
   --color-danger: #8f3d2b;
   --color-ok: #2d5a45;
@@ -122,3 +123,4 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 999px;
   background: var(--color-primary);
 }
+
