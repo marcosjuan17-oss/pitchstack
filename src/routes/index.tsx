@@ -61,14 +61,31 @@ function Home() {
     <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start">
         <div>
+          <p className="mb-3 inline-flex rounded-full bg-accent/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-accent">
+            Free basketball operations planner
+          </p>
           <h1 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">
-            Build a basketball ops stack against a real season budget.
+            Spend the season budget on what your team will actually use.
           </h1>
           <p className="mt-3 max-w-xl text-base leading-relaxed text-muted">
-            For rec teams, high-school programs, and AAU clubs in the US.
-            Ranked Must / Should / Skip across software, hardware, and one
-            education item. Operational only — not medical or legal advice.
+            Set the roster, workload, budget, and priorities. PitchStack swaps
+            the recommendations as those choices change, then ranks the result
+            into Must, Should, and Skip. No signup and no sponsored placement.
           </p>
+          <div className="mt-5 grid grid-cols-3 gap-2 text-center">
+            <div className="rounded-[var(--radius-md)] bg-surface px-2 py-3 shadow-[var(--shadow-border)]">
+              <strong className="block font-display text-xl">39</strong>
+              <span className="text-xs text-muted">curated options</span>
+            </div>
+            <div className="rounded-[var(--radius-md)] bg-surface px-2 py-3 shadow-[var(--shadow-border)]">
+              <strong className="block font-display text-xl">6–10</strong>
+              <span className="text-xs text-muted">final picks</span>
+            </div>
+            <div className="rounded-[var(--radius-md)] bg-surface px-2 py-3 shadow-[var(--shadow-border)]">
+              <strong className="block font-display text-xl">$0</strong>
+              <span className="text-xs text-muted">to calculate</span>
+            </div>
+          </div>
           <aside
             id="stack-form"
             className="mt-6 rounded-[var(--radius-xl)] bg-surface p-5 shadow-[var(--shadow-border)] lg:sticky lg:top-6"
@@ -77,7 +94,7 @@ function Home() {
               Your team
             </h2>
             <p className="mb-5 mt-1 text-sm text-muted">
-              Results update as you change the numbers.
+              Every control can change the products, priority, or budget fit.
             </p>
             <StackForm
               inputs={inputs}
@@ -90,3 +107,4 @@ function Home() {
     </main>
   );
 }
+
