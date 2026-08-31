@@ -55,6 +55,10 @@ export function LineItemCard({ item, product, currency }: Props) {
         <p className="text-xs text-muted">{product.vendor}</p>
       </div>
       <p className="text-sm leading-relaxed text-muted">{item.reason}</p>
+      <p className="rounded-[var(--radius-md)] bg-fg/[0.035] px-3 py-2 text-xs leading-relaxed text-muted">
+        <span className="font-semibold text-fg">What it solves: </span>
+        {product.notes}
+      </p>
       <a
         href={href}
         target="_blank"
@@ -62,8 +66,8 @@ export function LineItemCard({ item, product, currency }: Props) {
         className={cn(
           "inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] px-4 text-sm font-medium transition-[opacity,transform] duration-[var(--motion-quick)] ease-[var(--ease-out)] active:scale-[0.96]",
           skipped
-            ? "bg-fg/6 text-fg"
-            : "bg-primary text-primary-fg hover:opacity-90",
+            ? "bg-fg/6 text-fg hover:bg-fg/10"
+            : "bg-primary text-primary-fg shadow-sm hover:-translate-y-0.5 hover:shadow-md",
         )}
       >
         {offerCtaLabel(product.affiliateUrl, product.vendor)}
@@ -78,3 +82,4 @@ export function LineItemCard({ item, product, currency }: Props) {
     </article>
   );
 }
+
