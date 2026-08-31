@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { Check, Copy, SlidersHorizontal } from "lucide-react";
+import { Check, Copy, SlidersHorizontal, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { BudgetBar } from "@/components/budget-bar";
@@ -8,7 +8,7 @@ import { DisclosureBanner } from "@/components/disclosure-banner";
 import { LineItemCard } from "@/components/line-item-card";
 import { Button } from "@/components/ui/button";
 import { catalogById } from "@/lib/stack/catalog.ts";
-import { LEVEL_LABELS } from "@/lib/stack/labels.ts";
+import { LEVEL_LABELS, NEED_LABELS } from "@/lib/stack/labels.ts";
 import { summarizeStack } from "@/lib/stack/recommend.ts";
 import { encodeInputs } from "@/lib/stack/share.ts";
 import type { Inputs, LineItem, Tier } from "@/lib/stack/types.ts";
@@ -51,9 +51,10 @@ export function StackResults({ inputs, shareMode = false }: Props) {
   return (
     <div id="stack-results" className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted">
-          Stack for this roster
-        </p>
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+          <Sparkles className="size-4" />
+          Tailored stack · updates live
+        </div>
         <h2 className="font-display text-3xl font-medium tracking-tight">
           {inputs.rosterSize} players · {LEVEL_LABELS[inputs.level]}
         </h2>
@@ -61,6 +62,25 @@ export function StackResults({ inputs, shareMode = false }: Props) {
           {inputs.practiceHoursPerWeek} practice hours/week · basketball ·{" "}
           {inputs.currency}
         </p>
+        <div className="mt-2 flex flex-wrap gap-2" aria-label="Inputs shaping these results">
+          <span className="rounded-full bg-fg/6 px-3 py-1.5 text-xs font-medium text-fg">
+            ${inputs.budget.toLocaleString()} budget
+          </span>
+          {inputs.needs.length > 0 ? (
+            inputs.needs.map((need) => (
+              <span
+                key={need}
+                className="rounded-full bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent"
+              >
+                {NEED_LABELS[need]}
+              </span>
+            ))
+          ) : (
+            <span className="rounded-full bg-fg/6 px-3 py-1.5 text-xs font-medium text-muted">
+              Core operations only
+            </span>
+          )}
+        </div>
       </div>
 
       <BudgetBar summary={summary} currency={inputs.currency} />
@@ -108,7 +128,7 @@ export function StackResults({ inputs, shareMode = false }: Props) {
               </h3>
               <p className="text-sm text-muted">{TIER_COPY[tier]}</p>
             </div>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
               {items.map((item) => {
                 const product = catalogById[item.productId];
                 if (!product) return null;
@@ -128,3 +148,4 @@ export function StackResults({ inputs, shareMode = false }: Props) {
     </div>
   );
 }
+
