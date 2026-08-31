@@ -113,29 +113,19 @@ function collectCandidates(inputs: Inputs, catalog: Product[]): Candidate[] {
   const r = rosterPhrase(inputs);
   const b = budgetPhrase(inputs);
 
-  // Always: field markers. Locked Must — the cheapest shared training kit.
-  add(
-    out,
-    seen,
-    pickGroup("field-markers", inputs, pool),
-    inputs,
-    "must",
-    `${r}: a shared cone set is the one gym item every session uses. ${b} still covers this.`,
-    90,
-    { locked: true },
-  );
-
-  // Bibs: Must from 10 players up (even-sided games).
+  // Scrimmage vests become useful with two full groups, but are never a
+  // universal Must. This keeps the first result from being the same generic
+  // starter kit for every team.
   add(
     out,
     seen,
     pickGroup("training-bibs", inputs, pool),
     inputs,
-    inputs.rosterSize >= 10 ? "must" : "should",
-    inputs.rosterSize >= 10
-      ? `${r}: one 14-bib set splits two colours without borrowing from another team.`
+    inputs.rosterSize >= 12 ? "must" : "should",
+    inputs.rosterSize >= 12
+      ? `${r}: one numbered 12-vest set creates two full practice groups and makes stat tracking easier.`
       : `${r}: bibs help, but a small side can mark shirts for a season if ${b} is tight.`,
-    80,
+    72,
   );
 
   // Balls: Must from 10 players. Youth pack vs club pack via catalog constraints.
@@ -150,6 +140,44 @@ function collectCandidates(inputs: Inputs, catalog: Product[]): Candidate[] {
       : `${r}: a full pack is optional at this size — borrow from the gym cage first.`,
     78,
   );
+
+  // The baseline operating item changes with the actual program instead of
+  // forcing cones into every result.
+  if (inputs.level === "youth" && inputs.practiceHoursPerWeek >= 3) {
+    add(
+      out,
+      seen,
+      pickGroup("practice-layout", inputs, pool),
+      inputs,
+      inputs.budget >= 350 ? "should" : "skip",
+      inputs.budget >= 350
+        ? `${r} at ${inputs.practiceHoursPerWeek} h/week: numbered Shot Spotz give young players visible spacing and rotation cues.`
+        : `Skip station markers on ${b}; use floor-safe tape already owned by the gym.`,
+      34,
+    );
+  } else if (inputs.level === "high_school" || inputs.level === "club") {
+    add(
+      out,
+      seen,
+      pickGroup("tactics", inputs, pool),
+      inputs,
+      inputs.budget >= 500 ? "should" : "skip",
+      inputs.budget >= 500
+        ? `${r}: one double-sided full-court / half-court board is useful for timeouts and scout-team walkthroughs.`
+        : `Skip a new coaching board on ${b}; print and laminate a court sheet for this season.`,
+      33,
+    );
+  } else {
+    add(
+      out,
+      seen,
+      pickGroup("coach-pocket", inputs, pool),
+      inputs,
+      "should",
+      `${r}: a water-resistant stopwatch makes timed stations easier to run with student staff.`,
+      33,
+    );
+  }
 
   // Med kit: always consider if roster >= 12; also if the toggle is on.
   // Operational only — never injury advice.
@@ -319,6 +347,17 @@ function collectCandidates(inputs: Inputs, catalog: Product[]): Candidate[] {
         : `Skip new duffels. ${b} — reuse club bags this season.`,
       35,
     );
+    if (inputs.rosterSize >= 16 || inputs.budget >= 1000) {
+      add(
+        out,
+        seen,
+        pickGroup("equipment-labeling", inputs, pool),
+        inputs,
+        "should",
+        `${r}: label chargers, cameras, ball bags, and travel bins so shared gear returns after tournaments.`,
+        38,
+      );
+    }
   }
 
   // Fundraising: asked for, or budget is too low to cover a basic field kit.
@@ -416,7 +455,12 @@ function collectCandidates(inputs: Inputs, catalog: Product[]): Candidate[] {
       32,
     );
   }
-  if (inputs.budget >= 900 && inputs.rosterSize >= 12) {
+  if (
+    inputs.budget >= 900 &&
+    inputs.rosterSize >= 12 &&
+    inputs.level !== "high_school" &&
+    inputs.level !== "club"
+  ) {
     add(
       out,
       seen,
@@ -427,14 +471,18 @@ function collectCandidates(inputs: Inputs, catalog: Product[]): Candidate[] {
       30,
     );
   }
-  if (inputs.budget >= 1200 && inputs.rosterSize >= 14) {
+  if (
+    inputs.budget >= 1200 &&
+    inputs.rosterSize >= 14 &&
+    inputs.practiceHoursPerWeek >= 5
+  ) {
     add(
       out,
       seen,
-      pickGroup("extra-goals", inputs, pool),
+      pickGroup("shooting-efficiency", inputs, pool),
       inputs,
       "should",
-      `${r}: a portable hoop unlocks a second shooting station when the main court is split.`,
+      `${r}: a hoop-mounted shot return keeps one shooting station moving without assigning a rebounder.`,
       26,
     );
   }
@@ -567,3 +615,4 @@ export function summarizeStack(
     overBudget: delta < 0,
   };
 }
+
