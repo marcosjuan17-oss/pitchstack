@@ -283,6 +283,40 @@ describe("budget swaps the film path", () => {
   });
 });
 
+describe("input choices materially change the stack", () => {
+  const base: Inputs = {
+    sport: "basketball",
+    level: "high_school",
+    rosterSize: 15,
+    practiceHoursPerWeek: 4,
+    budget: 1500,
+    currency: "USD",
+    needs: [],
+  };
+
+  it("adds multiple travel-specific operations picks", () => {
+    const travel = { ...base, rosterSize: 18, needs: ["travel"] as Need[] };
+    const travelIds = ids(travel);
+    assert.ok(travelIds.includes("disc-markers-40"), travelIds.join(","));
+    assert.ok(travelIds.includes("kit-duffels"), travelIds.join(","));
+  });
+
+  it("changes the baseline operating pick by program level", () => {
+    const youth = { ...base, level: "youth" as const };
+    const highSchool = { ...base, level: "high_school" as const };
+    assert.ok(ids(youth).includes("marker-cones-50"));
+    assert.ok(ids(highSchool).includes("tactics-board"));
+    assert.notDeepEqual(ids(youth), ids(highSchool));
+  });
+
+  it("adds a shooting-efficiency pick only for high-hour healthy budgets", () => {
+    const shortWeek = { ...base, practiceHoursPerWeek: 3 };
+    const longWeek = { ...base, practiceHoursPerWeek: 7 };
+    assert.ok(!ids(shortWeek).includes("popup-goals"));
+    assert.ok(ids(longWeek).includes("popup-goals"));
+  });
+});
+
 describe("share-stable engine", () => {
   it("is deterministic", () => {
     assert.deepEqual(recommend(wellFundedClub), recommend(wellFundedClub));
@@ -311,3 +345,4 @@ describe("default club stack", () => {
     );
   });
 });
+
