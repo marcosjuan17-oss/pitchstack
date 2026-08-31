@@ -7,7 +7,7 @@ export function SiteHeader() {
         <Link to="/" className="flex min-h-11 items-center gap-3">
           <span
             aria-hidden="true"
-            className="flex size-8 flex-col justify-center gap-0.5 rounded-[var(--radius-sm)] bg-primary px-1.5"
+            className="flex size-8 flex-col justify-center gap-0.5 rounded-[var(--radius-sm)] bg-accent px-1.5 shadow-sm"
           >
             <span className="mx-auto block h-0.5 w-3 rounded-full bg-primary-fg/70" />
             <span className="mx-auto block h-0.5 w-4 rounded-full bg-primary-fg/85" />
@@ -27,3 +27,4 @@ export function SiteHeader() {
     </header>
   );
 }
+
